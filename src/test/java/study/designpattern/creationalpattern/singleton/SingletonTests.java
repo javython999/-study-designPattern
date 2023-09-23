@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SingletonTests {
 
@@ -54,6 +55,40 @@ class SingletonTests {
         }
         Files.delete(Path.of("settings.obj"));
         assertThat(settings1).isNotEqualTo(settings2);
+    }
+
+    /**
+     * enum으로 선언하면 java 리플렉션을 막을 수 있다.
+     * 미리 생성된다는 점(lazy-loading 불가), 상속을 사용할 수 없다는 점이 단점이다.
+     */
+    @Test
+    void enumSingletonBlockReflection() {
+        EnumSettings settings1 = EnumSettings.INSTANCE;
+        EnumSettings settings2 = null;
+
+        Constructor<?>[] constructors = EnumSettings.class.getDeclaredConstructors();
+        assertThatThrownBy(() -> {
+            for (Constructor<?> constructor : constructors) {
+                constructor.setAccessible(true);
+                constructor.newInstance("INSTANCE");
+            }
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void enumSingletonBlockSerialization() throws IOException, ClassNotFoundException {
+        EnumSettings settings1 = EnumSettings.INSTANCE;
+
+        try(ObjectOutput output = new ObjectOutputStream(new FileOutputStream("settings.obj"))) {
+            output.writeObject(settings1);
+        }
+
+        EnumSettings settings2 = null;
+        try(ObjectInput input = new ObjectInputStream(new FileInputStream("settings.obj"))) {
+            settings2 = (EnumSettings) input.readObject();
+        }
+        Files.delete(Path.of("settings.obj"));
+        assertThat(settings1).isEqualTo(settings2);
     }
 
 }

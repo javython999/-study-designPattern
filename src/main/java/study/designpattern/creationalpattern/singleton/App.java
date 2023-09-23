@@ -7,5 +7,10 @@ public class App {
         Settings settings1 = Settings.getInstance();
         Settings settings2 = Settings.getInstance();
         System.out.println(settings1 == settings2); // true
+
+        // enum으로 선언시 리플렉션도 막을 수 있다.
+        EnumSettings settings3 = EnumSettings.INSTANCE;
+
+
     }
 }
