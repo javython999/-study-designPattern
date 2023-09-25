@@ -1,15 +1,16 @@
 package study.designpattern.creationalpattern.factorymethod.after;
 
 public interface ShipFactory {
+
     default Ship orderShip(String name, String email) {
         validate(name, email);
-
         prepareFor(name);
         Ship ship = createShip();
-
         sendEmailTo(email, ship);
         return ship;
     }
+
+    void sendEmailTo(String email, Ship ship);
 
     Ship createShip();
 
@@ -26,7 +27,4 @@ public interface ShipFactory {
         System.out.println(name + " 만들 준비 중");
     }
 
-    private void sendEmailTo(String email, Ship ship) {
-        System.out.println(ship.getName() + " 다 만들었습니다.");
-    }
 }

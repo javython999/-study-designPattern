@@ -1,8 +1,5 @@
 package study.designpattern.creationalpattern.factorymethod.before;
 
-import study.designpattern.creationalpattern.factorymethod.before.Ship;
-import study.designpattern.creationalpattern.factorymethod.before.ShipFactory;
-
 public class Client {
 
     public static void main(String[] args) {
