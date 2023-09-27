@@ -7,5 +7,8 @@ public class AfterApp {
         TourDirector tourDirector = new TourDirector(new DefaultTourBuilder());
         TourPlan cancunTrip = tourDirector.cancunTrip();
         TourPlan longBeachTrip = tourDirector.longBeachTrip();
+
+        cancunTrip.toString();
     }
 }
+/**/
